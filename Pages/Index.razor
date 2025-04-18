@@ -1,0 +1,18 @@
+@inject UserSessionService UserSession
+
+<h3>Welcome to EventEase 🎉</h3>
+
+@if (!string.IsNullOrEmpty(UserSession.UserName))
+{
+    <p class="alert alert-success">
+        👋 Welcome back, <b>@UserSession.UserName</b>! You're registered for <b>@UserSession.RegisteredEvent</b>.
+    </p>
+    
+}
+else
+{
+    <p>
+        Explore and register for upcoming events!
+    </p>
+    <NavLink class="btn btn-primary" href="/events">View Events</NavLink>
+}

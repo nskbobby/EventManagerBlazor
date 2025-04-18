@@ -1,0 +1,26 @@
+@page "/events"
+@using EventEaseApp
+
+<h2 class="mb-4">Upcoming Events</h2>
+
+<Virtualize Items="@Events" Context="evt" ItemSize="100">
+    <div class="mb-4">
+        <EventCard EventName="@evt.Name" EventDate="@evt.Date" EventLocation="@evt.Location" />
+        <NavLink class="btn btn-primary mt-2" href="@GetEncodedEventUrl(evt.Name)">View Details</NavLink>
+    </div>
+</Virtualize>
+
+@code {
+    private List<EventModel> Events;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var eventManager = new EventManager();
+        Events = eventManager.GetAllEvents(); 
+    }
+
+    private string GetEncodedEventUrl(string name)
+    {
+        return $"/events/details/{Uri.EscapeDataString(name ?? string.Empty)}";
+    }
+}

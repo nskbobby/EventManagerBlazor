@@ -1,0 +1,44 @@
+@page "/events/details/{eventName}"
+@using EventEaseApp
+@inject NavigationManager NavManager
+
+<h2>Event Details</h2>
+
+@if (selectedEvent == null)
+{
+    <p class="text-danger">⚠️ Event not found.</p><NavLink href="/events">Go back</NavLink>
+}
+else
+{
+    <div class="card p-4 shadow-sm">
+        <h3>@selectedEvent.Name</h3>
+        <p><strong>Date:</strong> @selectedEvent.Date.ToShortDateString()</p>
+        <p><strong>Location:</strong> @selectedEvent.Location</p>
+
+        <NavLink class="btn btn-success mt-3" href="/events/register">Register Now</NavLink>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string eventName { get; set; }
+
+    private EventModel selectedEvent;
+    private EventManager eventManager = new EventManager();
+    protected override void OnInitialized()
+    {
+        
+        selectedEvent = eventManager.GetAllEvents()
+            .FirstOrDefault(e => e.Name.Equals(eventName, StringComparison.OrdinalIgnoreCase)) ?? new EventModel();
+    }
+
+   protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrWhiteSpace(eventName))
+        {
+            var decodedName = Uri.UnescapeDataString(eventName);
+            selectedEvent = eventManager.GetAllEvents()
+                .FirstOrDefault(e => e.Name.Equals(decodedName, StringComparison.OrdinalIgnoreCase)) ?? new EventModel();
+        }
+    }
+}

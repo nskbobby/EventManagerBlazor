@@ -1,0 +1,1 @@
+K:\MyProjects\blazorproj\EventEaseApp\publish\web.config
